@@ -1,0 +1,92 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6ff;
+}
+
+/* Contenedor principal: dos columnas */
+.container-login {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+/* Formulario (lado izquierdo) */
+.login-form {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+    z-index: 2;
+}
+
+/* Caja interna del formulario */
+.login-box {
+    width: 100%;
+    max-width: 350px;
+}
+
+/* Título */
+.login-form h1 {
+    font-weight: 700;
+    color: #222;
+}
+
+/* Botones */
+.btn-primary {
+    background-color: #4a3aff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #372fd1;
+}
+
+.btn-outline-secondary {
+    border: 1px solid #ccc;
+}
+
+/* Imagen del lado derecho */
+.login-image {
+    flex: 1;
+    background-color: #e8f0ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.login-image img {
+    width: 70%;
+    max-width: 400px;
+    object-fit: contain;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .container-login {
+        flex-direction: column;
+    }
+
+    .login-image {
+        display: none;
+    }
+
+    .login-form {
+        width: 100%;
+        box-shadow: none;
+    }
+}
+
+body {
+    background-color: #f4f4f4 !important;
+}
+
+.container-login {
+    background-color: #ffffff !important;
+}
