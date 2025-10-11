@@ -4,140 +4,177 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Papelería El Triunfo</title>
+    <title>Registro - Papelería El Triunfo</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <style>
-        body {
-            background-color: #eef3ff;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container-login {
-            display: flex;
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            width: 900px;
-            max-width: 90%;
-        }
-
-        .login-form {
-            flex: 1;
-            padding: 3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .login-box {
-            width: 100%;
-            max-width: 350px;
-        }
-
-        .login-image {
-            flex: 1;
-            background-color: #dde7ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .login-image img {
-            width: 90%;
-            max-width: 350px;
-            border-radius: 1rem;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .btn-primary {
-            background-color: #463bff;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: #342eff;
-        }
-    </style>
+    <link rel="stylesheet" href="src/css/loginStyle.css" />
 </head>
 
 <body>
-    <div class="container-login">
-        <!-- Columna izquierda: Login / Registro -->
-        <div class="login-form">
-            <div class="login-box">
-                <!-- FORMULARIO LOGIN -->
-                <div id="loginForm">
-                    <h2 class="text-center mb-4">Bienvenidos</h2>
-                    <form id="formLogin" class="needs-validation" novalidate>
-                        <div class="mb-3">
-                            <label for="txtEmail" class="form-label">Correo electrónico</label>
-                            <input type="email" class="form-control" id="txtEmail" required />
-                            <div class="invalid-feedback">Ingresa tu correo electrónico.</div>
-                        </div>
+    <div class="login-box text-center">
+        <img src="src/assets/icon/logo.png" alt="Logo" />
+        <h2>El Triunfo</h2>
+        <p>Librería · Papelería · Café</p>
 
-                        <div class="mb-3">
-                            <label for="idPassword" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="idPassword" required />
-                            <div class="invalid-feedback">Ingresa tu contraseña.</div>
-                        </div>
-
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="termsCheck" required />
-                            <label class="form-check-label" for="termsCheck">Aceptar términos y condiciones</label>
-                            <div class="invalid-feedback">Debes aceptar los términos.</div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100 mb-2">Login</button>
-                        <button type="button" class="btn btn-outline-secondary w-100"
-                            id="btnGoRegister">Registrarse</button>
-                    </form>
-                </div>
-
-                <!-- FORMULARIO REGISTRO -->
-                <div id="registerForm" class="hidden">
-                    <h2 class="text-center mb-4">Crear cuenta</h2>
-                    <form id="formRegister" novalidate>
-                        <div class="mb-3">
-                            <label for="regEmail" class="form-label">Correo electrónico</label>
-                            <input type="email" class="form-control" id="regEmail" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="regPassword" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="regPassword" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="regPassword2" class="form-label">Confirmar contraseña</label>
-                            <input type="password" class="form-control" id="regPassword2" required />
-                        </div>
-
-                        <button type="submit" class="btn btn-success w-100 mb-2">Registrarme</button>
-                        <button type="button" class="btn btn-outline-secondary w-100" id="btnGoLogin">Volver al
-                            Login</button>
-                    </form>
-                </div>
-            </div>
+        <!-- SELECCIÓN DE REGISTRO -->
+        <div id="roleSelection" class="form-section active">
+            <h5 class="mb-3">Registrarse como:</h5>
+            <button class="btn-custom btn-cliente mb-3" id="btnCliente">Cliente</button>
+            <button class="btn-custom btn-empleado mb-3" id="btnEmpleado">Empleado</button>
+            <button class="btn-custom btn-admin" id="btnAdmin">Administrador</button>
         </div>
 
-        <!-- Columna derecha: Imagen -->
-        <div class="login-image">
-            <img src="./src/assets/image/ilustracion-login.png" alt="Ilustración de papelería" />
+        <!-- REGISTRO CLIENTE -->
+        <div id="formCliente" class="form-section">
+            <h5 class="mb-3">Registro Cliente</h5>
+            <form id="clienteRegisterForm">
+                <div class="mb-3">
+                    <label for="clienteNombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="clienteNombre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="clienteApellidos" class="form-label">Apellidos</label>
+                    <input type="text" class="form-control" id="clienteApellidos" required>
+                </div>
+                <div class="mb-3">
+                    <label for="clienteTelefono" class="form-label">Número de teléfono</label>
+                    <input type="tel" class="form-control" id="clienteTelefono" required>
+                </div>
+                <div class="mb-3">
+                    <label for="clienteEmail" class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control" id="clienteEmail" required>
+                </div>
+                <div class="mb-3">
+                    <label for="clientePass" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="clientePass" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mb-2">Registrarme</button>
+                <button type="button" class="btn btn-outline-secondary w-100" id="volverCliente">Volver</button>
+                <p class="mt-2"><a href="#" id="loginClienteLink" class="link">¿Ya tienes cuenta? Inicia sesión</a></p>
+            </form>
+        </div>
+
+        <!-- LOGIN CLIENTE -->
+        <div id="loginCliente" class="form-section">
+            <h5 class="mb-3">Iniciar sesión - Cliente</h5>
+            <form id="clienteLoginForm">
+                <div class="mb-3">
+                    <label for="loginClienteEmail" class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control" id="loginClienteEmail" required>
+                </div>
+                <div class="mb-3">
+                    <label for="loginClientePass" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="loginClientePass" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mb-2">Entrar</button>
+                <button type="button" class="btn btn-outline-secondary w-100" id="volverLoginCliente">Volver</button>
+            </form>
+        </div>
+
+        <!-- REGISTRO EMPLEADO -->
+        <div id="formEmpleado" class="form-section">
+            <h5 class="mb-3">Registro Empleado</h5>
+            <form id="empleadoRegisterForm">
+                <div class="mb-3">
+                    <label for="empleadoNombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="empleadoNombre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="empleadoApellidos" class="form-label">Apellidos</label>
+                    <input type="text" class="form-control" id="empleadoApellidos" required>
+                </div>
+                <div class="mb-3">
+                    <label for="empleadoDireccion" class="form-label">Dirección</label>
+                    <input type="text" class="form-control" id="empleadoDireccion" required>
+                </div>
+                <div class="mb-3">
+                    <label for="empleadoTelefono" class="form-label">Teléfono</label>
+                    <input type="tel" class="form-control" id="empleadoTelefono" required>
+                </div>
+                <div class="mb-3">
+                    <label for="empleadoID" class="form-label">ID de Empleado</label>
+                    <input type="text" class="form-control" id="empleadoID" required>
+                </div>
+                <div class="mb-3">
+                    <label for="empleadoPass" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="empleadoPass" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100 mb-2">Registrarme</button>
+                <button type="button" class="btn btn-outline-secondary w-100" id="volverEmpleado">Volver</button>
+                <p class="mt-2"><a href="#" id="loginEmpleadoLink" class="link">¿Ya tienes cuenta? Inicia sesión</a></p>
+            </form>
+        </div>
+
+        <!-- LOGIN EMPLEADO -->
+        <div id="loginEmpleado" class="form-section">
+            <h5 class="mb-3">Iniciar sesión - Empleado</h5>
+            <form id="empleadoLoginForm">
+                <div class="mb-3">
+                    <label for="loginEmpleadoID" class="form-label">ID de Empleado</label>
+                    <input type="text" class="form-control" id="loginEmpleadoID" required>
+                </div>
+                <div class="mb-3">
+                    <label for="loginEmpleadoPass" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="loginEmpleadoPass" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100 mb-2">Entrar</button>
+                <button type="button" class="btn btn-outline-secondary w-100" id="volverLoginEmpleado">Volver</button>
+            </form>
+        </div>
+
+        <!-- REGISTRO ADMIN -->
+        <div id="formAdmin" class="form-section">
+            <h5 class="mb-3">Registro Administrador</h5>
+            <form id="adminRegisterForm">
+                <div class="mb-3">
+                    <label for="adminNombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="adminNombre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="adminApellidos" class="form-label">Apellidos</label>
+                    <input type="text" class="form-control" id="adminApellidos" required>
+                </div>
+                <div class="mb-3">
+                    <label for="adminDireccion" class="form-label">Dirección</label>
+                    <input type="text" class="form-control" id="adminDireccion" required>
+                </div>
+                <div class="mb-3">
+                    <label for="adminTelefono" class="form-label">Teléfono</label>
+                    <input type="tel" class="form-control" id="adminTelefono" required>
+                </div>
+                <div class="mb-3">
+                    <label for="adminID" class="form-label">ID de Administrador</label>
+                    <input type="text" class="form-control" id="adminID" required>
+                </div>
+                <div class="mb-3">
+                    <label for="adminPass" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="adminPass" required>
+                </div>
+                <button type="submit" class="btn btn-dark w-100 mb-2">Registrarme</button>
+                <button type="button" class="btn btn-outline-secondary w-100" id="volverAdmin">Volver</button>
+                <p class="mt-2"><a href="#" id="loginAdminLink" class="link">¿Ya tienes cuenta? Inicia sesión</a></p>
+            </form>
+        </div>
+
+        <!-- LOGIN ADMIN -->
+        <div id="loginAdmin" class="form-section">
+            <h5 class="mb-3">Iniciar sesión - Administrador</h5>
+            <form id="adminLoginForm">
+                <div class="mb-3">
+                    <label for="loginAdminID" class="form-label">ID de Administrador</label>
+                    <input type="text" class="form-control" id="loginAdminID" required>
+                </div>
+                <div class="mb-3">
+                    <label for="loginAdminPass" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="loginAdminPass" required>
+                </div>
+                <button type="submit" class="btn btn-dark w-100 mb-2">Entrar</button>
+                <button type="button" class="btn btn-outline-secondary w-100" id="volverLoginAdmin">Volver</button>
+            </form>
         </div>
     </div>
 
-    <script src="./src/js/login.js"></script>
+    <script src="src/js/login.js"></script>
 </body>
 
 </html>

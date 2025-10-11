@@ -1,69 +1,97 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.getElementById("loginForm");
-    const registerForm = document.getElementById("registerForm");
+    console.log("✅ Script de login cargado correctamente");
 
-    const btnGoRegister = document.getElementById("btnGoRegister");
-    const btnGoLogin = document.getElementById("btnGoLogin");
+    // === REFERENCIAS ===
+    const roleSelection = document.getElementById("roleSelection");
+    const forms = document.querySelectorAll(".form-section");
 
-    const formLogin = document.getElementById("formLogin");
-    const formRegister = document.getElementById("formRegister");
+    // Formularios de registro
+    const formCliente = document.getElementById("formCliente");
+    const formEmpleado = document.getElementById("formEmpleado");
+    const formAdmin = document.getElementById("formAdmin");
 
-    // Cambiar entre login y registro
-    btnGoRegister.addEventListener("click", () => {
-        loginForm.classList.add("hidden");
-        registerForm.classList.remove("hidden");
+    // Formularios de login
+    const loginCliente = document.getElementById("loginCliente");
+    const loginEmpleado = document.getElementById("loginEmpleado");
+    const loginAdmin = document.getElementById("loginAdmin");
+
+    // === FUNCIONES DE VISIBILIDAD ===
+    function showForm(form) {
+        forms.forEach(f => f.classList.remove("active"));
+        form.classList.add("active");
+    }
+
+    function backToMenu() {
+        forms.forEach(f => f.classList.remove("active"));
+        roleSelection.classList.add("active");
+    }
+
+    // === SELECCIÓN DE REGISTRO ===
+    document.getElementById("btnCliente").addEventListener("click", () => showForm(formCliente));
+    document.getElementById("btnEmpleado").addEventListener("click", () => showForm(formEmpleado));
+    document.getElementById("btnAdmin").addEventListener("click", () => showForm(formAdmin));
+
+    // === BOTONES VOLVER ===
+    document.getElementById("volverCliente").addEventListener("click", backToMenu);
+    document.getElementById("volverEmpleado").addEventListener("click", backToMenu);
+    document.getElementById("volverAdmin").addEventListener("click", backToMenu);
+
+    // === LINK: YA TIENES CUENTA ===
+    document.getElementById("loginClienteLink").addEventListener("click", (e) => {
+        e.preventDefault();
+        showForm(loginCliente);
     });
 
-    btnGoLogin.addEventListener("click", () => {
-        registerForm.classList.add("hidden");
-        loginForm.classList.remove("hidden");
+    document.getElementById("loginEmpleadoLink").addEventListener("click", (e) => {
+        e.preventDefault();
+        showForm(loginEmpleado);
     });
 
-    // Registro: guarda el usuario en localStorage
-    formRegister.addEventListener("submit", (event) => {
-        event.preventDefault();
-
-        const email = document.getElementById("regEmail").value;
-        const password = document.getElementById("regPassword").value;
-        const password2 = document.getElementById("regPassword2").value;
-
-        if (password !== password2) {
-            alert("Las contraseñas no coinciden.");
-            return;
-        }
-
-        // Guardar usuario en localStorage
-        localStorage.setItem("userEmail", email);
-        localStorage.setItem("userPassword", password);
-
-        alert("Usuario registrado correctamente. Ahora inicia sesión.");
-
-        // Regresar al login
-        registerForm.classList.add("hidden");
-        loginForm.classList.remove("hidden");
+    document.getElementById("loginAdminLink").addEventListener("click", (e) => {
+        e.preventDefault();
+        showForm(loginAdmin);
     });
 
-    // Login: verifica credenciales
-    formLogin.addEventListener("submit", (event) => {
-        event.preventDefault();
+    // === VOLVER DESDE LOGIN ===
+    document.getElementById("volverLoginCliente").addEventListener("click", () => showForm(formCliente));
+    document.getElementById("volverLoginEmpleado").addEventListener("click", () => showForm(formEmpleado));
+    document.getElementById("volverLoginAdmin").addEventListener("click", () => showForm(formAdmin));
 
-        const email = document.getElementById("txtEmail").value;
-        const password = document.getElementById("idPassword").value;
-        const terms = document.getElementById("termsCheck").checked;
+    // === REGISTROS ===
+    document.getElementById("clienteRegisterForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("✅ Registro de cliente completado correctamente.");
+        showForm(loginCliente);
+    });
 
-        if (!terms) {
-            alert("Debes aceptar los términos.");
-            return;
-        }
+    document.getElementById("empleadoRegisterForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("✅ Registro de empleado completado correctamente.");
+        showForm(loginEmpleado);
+    });
 
-        const savedEmail = localStorage.getItem("userEmail");
-        const savedPassword = localStorage.getItem("userPassword");
+    document.getElementById("adminRegisterForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("✅ Registro de administrador completado correctamente.");
+        showForm(loginAdmin);
+    });
 
-        if (email === savedEmail && password === savedPassword) {
-            sessionStorage.setItem("isLoggedIn", "true");
-            window.location.href = "index.html";
-        } else {
-            alert("Correo o contraseña incorrectos.");
-        }
+    // === LOGIN ===
+    document.getElementById("clienteLoginForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("Bienvenido, cliente!");
+        window.location.href = "src/pages/cliente.html";
+    });
+
+    document.getElementById("empleadoLoginForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("Bienvenido, empleado!");
+        window.location.href = "src/pages/empleado.html";
+    });
+
+    document.getElementById("adminLoginForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("Bienvenido, administrador!");
+        window.location.href = "src/pages/admin.html";
     });
 });

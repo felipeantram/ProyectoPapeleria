@@ -1,92 +1,75 @@
-body,
-html {
-    height: 100%;
-    margin: 0;
-    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f6ff;
-}
-
-/* Contenedor principal: dos columnas */
-.container-login {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-}
-
-/* Formulario (lado izquierdo) */
-.login-form {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-    position: relative;
-    z-index: 2;
-}
-
-/* Caja interna del formulario */
-.login-box {
-    width: 100%;
-    max-width: 350px;
-}
-
-/* Título */
-.login-form h1 {
-    font-weight: 700;
-    color: #222;
-}
-
-/* Botones */
-.btn-primary {
-    background-color: #4a3aff;
-    border: none;
-}
-
-.btn-primary:hover {
-    background-color: #372fd1;
-}
-
-.btn-outline-secondary {
-    border: 1px solid #ccc;
-}
-
-/* Imagen del lado derecho */
-.login-image {
-    flex: 1;
-    background-color: #e8f0ff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-}
-
-.login-image img {
-    width: 70%;
-    max-width: 400px;
-    object-fit: contain;
-}
-
-/* Responsivo */
-@media (max-width: 768px) {
-    .container-login {
-        flex-direction: column;
-    }
-
-    .login-image {
-        display: none;
-    }
-
-    .login-form {
-        width: 100%;
-        box-shadow: none;
-    }
-}
-
+/* === LOGIN EL TRIUNFO === */
 body {
-    background-color: #f4f4f4 !important;
+    background-color: #083147;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
 }
 
-.container-login {
-    background-color: #ffffff !important;
+.login-box {
+    background-color: #0f4b63;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    width: 100%;
+    max-width: 370px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.login-box img {
+    width: 90px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.login-box h2 {
+    color: #f22b2b;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+
+.login-box p {
+    font-size: 0.9rem;
+    color: #d0e6ff;
+    margin-bottom: 1.5rem;
+}
+
+.btn-custom {
+    width: 100%;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.btn-custom:hover {
+    transform: scale(1.03);
+}
+
+.btn-cliente {
+    background-color: #3aa6ff;
+    color: white;
+}
+
+.btn-empleado {
+    background-color: #3aa6ff;
+    color: white;
+}
+
+.btn-admin {
+    background-color: #3aa6ff;
+    color: white;
+}
+
+/* Formularios */
+.form-section {
+    display: none;
+}
+
+.form-section.active {
+    display: block;
 }
