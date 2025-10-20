@@ -2,98 +2,98 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginC = document.getElementById("login-container");
     const regC = document.getElementById("register-container");
 
-    // Rutas front
+    // Helpers de almacenamiento
+    const STORAGE_USERS = "users";   // lista de usuarios
+    const STORAGE_ROLE = "role";    // rol de sesión actual
+    const STORAGE_EMAIL = "userEmail";
+
     const routes = {
         administrador: "src/pages/admin.html",
         empleado: "src/pages/empleado.html",
         cliente: "src/pages/cliente.html",
     };
 
-    // Base de la API (login.html está en la raíz del proyecto)
-    const apiBase = new URL("./api/", window.location.href).href;
-
-    // Helpers
     const norm = (s) => (s || "").toString().trim().toLowerCase();
-    const byId = (id) => document.getElementById(id);
 
-    async function postJSON(url, data) {
-        const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-        });
-        // PHP devolverá 4xx/5xx cuando haya error; parseamos siempre el json
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok || json.error) {
-            const msg = json.error || `Error HTTP ${res.status}`;
-            throw new Error(msg);
-        }
-        return json;
-    }
+    const getUsers = () => {
+        try { return JSON.parse(localStorage.getItem(STORAGE_USERS)) || []; }
+        catch { return []; }
+    };
+    const saveUsers = (arr) => localStorage.setItem(STORAGE_USERS, JSON.stringify(arr));
+
+    const findUserByEmail = (email) => {
+        const users = getUsers();
+        return users.find(u => norm(u.correo) === norm(email));
+    };
 
     // ------- NAV login/registro ----------
-    byId("go-register").addEventListener("click", (e) => {
+    document.getElementById("go-register").addEventListener("click", (e) => {
         e.preventDefault();
         loginC.classList.add("hidden");
         regC.classList.remove("hidden");
     });
 
-    byId("go-login").addEventListener("click", (e) => {
+    document.getElementById("go-login").addEventListener("click", (e) => {
         e.preventDefault();
         regC.classList.add("hidden");
         loginC.classList.remove("hidden");
     });
 
-    byId("btn-back-login").addEventListener("click", () => {
+    document.getElementById("btn-back-login").addEventListener("click", () => {
         regC.classList.add("hidden");
         loginC.classList.remove("hidden");
     });
 
-    // ------------- LOGIN (contra PHP/MariaDB) -------------
-    byId("login-form").addEventListener("submit", async (e) => {
+    // ------------- LOGIN (con validación de rol) -------------
+    document.getElementById("login-form").addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const roleSel = byId("login-role").value; // "Administrador" | "Empleado" | "Cliente"
-        const email = byId("login-email").value;
-        const password = byId("login-password").value;
+        const roleSel = document.getElementById("login-role").value; // "Administrador" | "Empleado" | "Cliente"
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
 
         if (!roleSel) return alert("Selecciona un tipo de usuario.");
         if (!(email && password)) return alert("Por favor llena todos los campos.");
 
-        const sel = norm(roleSel);
-
-        // Por ahora solo BD para cliente/empleado
-        if (sel === "administrador") {
-            alert("El rol Administrador aún no está conectado a BD. Agrega su tabla/endpoint para habilitarlo.");
+        const user = findUserByEmail(email);
+        if (!user) {
+            alert("No existe una cuenta con ese correo.");
             return;
         }
 
-        // Deshabilitar botón para evitar doble submit
-        const btn = e.submitter || byId("login-submit");
-        btn && (btn.disabled = true);
-
-        try {
-            const payload = { rol: roleSel, correo: email, password };
-            const data = await postJSON(`${apiBase}login.php`, payload);
-
-            // Guarda sesión mínima y redirige a SU panel
-            localStorage.setItem("role", roleSel);
-            localStorage.setItem("userEmail", email);
-
-            const target = routes[sel];
-            if (!target) throw new Error("Ruta de panel no configurada para el rol.");
-            window.location.assign(new URL(target, window.location.href));
-        } catch (err) {
-            alert(err.message || "Error al iniciar sesión.");
-        } finally {
-            btn && (btn.disabled = false);
+        // Validación de contraseña
+        if (user.password !== password) {
+            alert("Contraseña incorrecta.");
+            return;
         }
+
+        // Validación de rol: el seleccionado debe coincidir con el rol registrado
+        const selectedRole = norm(roleSel);                // "administrador" | "empleado" | "cliente"
+        const registeredRole = norm(user.rol);             // guardado al registrar
+
+        if (selectedRole !== registeredRole) {
+            alert(`Este correo está registrado como "${user.rol}". Selecciona ese rol para ingresar.`);
+            // Si prefieres forzar la entrada al rol correcto automáticamente, descomenta:
+            // localStorage.setItem(STORAGE_ROLE, user.rol);
+            // localStorage.setItem(STORAGE_EMAIL, user.correo);
+            // window.location.assign(new URL(routes[registeredRole], window.location.href));
+            return;
+        }
+
+        // Éxito: guarda sesión y manda a SU panel
+        localStorage.setItem(STORAGE_ROLE, user.rol);      // guarda el texto tal cual "Cliente/Empleado/Administrador" si así lo registraste
+        localStorage.setItem(STORAGE_EMAIL, user.correo);
+
+        const target = routes[selectedRole];
+        if (!target) return alert("Ruta de panel no configurada para el rol.");
+
+        window.location.assign(new URL(target, window.location.href));
     });
 
-    // ------------- REGISTRO dinámico por rol -------------
-    const roleSelect = byId("register-role");
+    // ------------- REGISTRO (persistiendo usuario) -------------
+    const roleSelect = document.getElementById("register-role");
     const roleFields = Array.from(document.querySelectorAll(".role-field"));
-    const submitBtn = byId("register-submit");
+    const submitBtn = document.getElementById("register-submit");
 
     function updateRegisterFields() {
         const role = roleSelect.value; // "", Administrador, Empleado, Cliente
@@ -128,48 +128,45 @@ document.addEventListener("DOMContentLoaded", () => {
     updateRegisterFields();
     roleSelect.addEventListener("change", updateRegisterFields);
 
-    // ------------- REGISTRO (contra PHP/MariaDB) -------------
-    byId("register-form").addEventListener("submit", async (e) => {
+    document.getElementById("register-form").addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const role = byId("register-role").value; // "Administrador" | "Empleado" | "Cliente"
+        const role = document.getElementById("register-role").value; // "Administrador" | "Empleado" | "Cliente"
         if (!role) return alert("Selecciona un rol.");
 
-        if (norm(role) === "administrador") {
-            alert("El registro de Administrador no está conectado a BD aún.");
-            return;
-        }
+        const name = document.getElementById("register-name").value;
+        const email = document.getElementById("register-email").value;
+        const pass = document.getElementById("register-password").value;
 
-        const name = byId("register-name").value;
-        const email = byId("register-email").value;
-        const pass = byId("register-password").value;
-
-        // Construimos payload; PHP ignora campos que no apliquen
+        // Datos opcionales por rol
         const payload = {
-            rol: role,
+            rol: role, // guardamos tal cual (luego normalizamos al comparar)
             nombre: name,
             correo: email,
             password: pass,
-            direccion: byId("register-address")?.value || "",
-            telefono: byId("register-phone")?.value || "",
-            puesto: byId("register-id")?.value || "" // ajusta si usas otro input para puesto
+            direccion: document.getElementById("register-address").value || null,
+            id_empleado: document.getElementById("register-id").value || null,
+            codigo_admin: document.getElementById("register-code").value || null,
+            celular: document.getElementById("register-phone").value || null,
         };
 
-        submitBtn.disabled = true;
-
-        try {
-            const data = await postJSON(`${apiBase}register.php`, payload);
-            alert(`Cuenta creada (${data.rol}) para ${name}`);
-
-            // Volver al login
-            regC.classList.add("hidden");
-            loginC.classList.remove("hidden");
-            e.target.reset();
-            updateRegisterFields();
-        } catch (err) {
-            alert(err.message || "Error al registrar.");
-        } finally {
-            submitBtn.disabled = false;
+        // Validar que no exista ya un usuario con ese correo
+        const existing = findUserByEmail(email);
+        if (existing) {
+            return alert(`Ese correo ya está registrado como "${existing.rol}". Usa otro correo o inicia sesión como ${existing.rol}.`);
         }
+
+        // Guardar usuario en localStorage
+        const users = getUsers();
+        users.push(payload);
+        saveUsers(users);
+
+        alert(`Cuenta creada (${role}) para ${name}`);
+
+        // Volver al login
+        regC.classList.add("hidden");
+        loginC.classList.remove("hidden");
+        e.target.reset();
+        updateRegisterFields();
     });
 });
