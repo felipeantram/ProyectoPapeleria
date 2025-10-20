@@ -1,75 +1,137 @@
-/* === LOGIN EL TRIUNFO === */
+/* Fondo general */
 body {
-    background-color: #083147;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e6f0ff;
+    /* Azul muy claro */
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    font-family: 'Poppins', sans-serif;
 }
 
-.login-box {
-    background-color: #0f4b63;
-    padding: 2.5rem;
-    border-radius: 1rem;
-    width: 100%;
-    max-width: 370px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-    color: white;
+/* Contenedor general */
+.container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 40px 30px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.login-box img {
-    width: 90px;
-    height: auto;
-    margin-bottom: 10px;
-}
-
-.login-box h2 {
-    color: #f22b2b;
-    font-weight: 700;
-    margin-bottom: 0.3rem;
-}
-
-.login-box p {
-    font-size: 0.9rem;
-    color: #d0e6ff;
-    margin-bottom: 1.5rem;
-}
-
-.btn-custom {
-    width: 100%;
-    border: none;
-    padding: 12px;
-    font-size: 1rem;
-    border-radius: 8px;
-    font-weight: 500;
-    transition: transform 0.2s ease, background 0.3s ease;
-}
-
-.btn-custom:hover {
-    transform: scale(1.03);
-}
-
-.btn-cliente {
-    background-color: #3aa6ff;
-    color: white;
-}
-
-.btn-empleado {
-    background-color: #3aa6ff;
-    color: white;
-}
-
-.btn-admin {
-    background-color: #3aa6ff;
-    color: white;
+/* Título */
+h2 {
+    text-align: center;
+    color: #004aad;
+    margin-bottom: 25px;
 }
 
 /* Formularios */
-.form-section {
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+}
+
+/* Inputs y select */
+input,
+select {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1.8px solid #bcd0f7;
+    font-size: 15px;
+    width: 100%;
+    outline: none;
+    transition: all 0.3s;
+}
+
+input:focus,
+select:focus {
+    border-color: #004aad;
+    box-shadow: 0 0 4px rgba(0, 74, 173, 0.4);
+}
+
+/* Botones */
+button {
+    background-color: #004aad;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #00337a;
+}
+
+/* Checkbox y textos */
+label {
+    font-size: 14px;
+    color: #333;
+}
+
+.switch {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.switch a {
+    color: #004aad;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.switch a:hover {
+    text-decoration: underline;
+}
+
+/* Ocultar contenedor secundario */
+.hidden {
     display: none;
 }
 
-.form-section.active {
-    display: block;
+/* Íconos dentro de inputs */
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group i {
+    position: absolute;
+    left: 10px;
+    color: #004aad;
+    font-size: 18px;
+}
+
+.input-group input {
+    padding-left: 35px;
+    /* espacio para el ícono */
+}
+
+/* Animación de transición entre formularios */
+.container {
+    animation: fadeIn 0.4s ease;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
