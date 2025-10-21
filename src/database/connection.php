@@ -5,7 +5,7 @@ class ConexionDB
     public static function setConnection()
     {
         $host = "localhost";
-        $dbName = 'papeleria3a';
+        $dbName = 'PAPELERIAELTRIUNFO';
         $user = 'root';
         $password = 'mariadebe';
         $port = '3306';
