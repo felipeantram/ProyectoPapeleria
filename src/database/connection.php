@@ -7,7 +7,7 @@ class ConexionDB
         $host = "localhost";
         $dbName = 'EL_TRIUNFO';
         $user = 'root';
-        $password = 'aorf2024';
+        $password = 'mariadebe';
         $port = '3306';
         $characterSet = 'utf8mb4';
 
