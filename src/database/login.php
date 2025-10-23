@@ -1,60 +1,70 @@
 <?php
-// FICHERO: login.php (¡NUEVO ARCHIVO!)
-session_start(); // 🚨 CRÍTICO: Inicia la sesión de PHP
+// FICHERO: login.php (Versión Final)
+session_start(); // Inicia la sesión de PHP
 
 header('Content-Type: application/json');
-require_once 'connection.php'; // Usa tu archivo de conexión
+require_once 'connection.php';
 
 try {
     $conn = ConexionDB::setConnection();
 
     // 1. Obtener datos del JSON
     $entrada = json_decode(file_get_contents('php://input'), true);
-    $correo = $entrada['correo'] ?? null;
-    $contraseña = $entrada['contraseña'] ?? null;
 
-    if (!$correo || !$contraseña) {
-        echo json_encode(["error" => "Faltan correo o contraseña."]);
+    // Usamos 'correo' y 'password' como claves de JSON para evitar problemas con la 'ñ'
+    $correo = $entrada['correo'] ?? null;
+    $contrasena_plana = $entrada['password'] ?? null;
+
+    if (!$correo || !$contrasena_plana) {
+        echo json_encode(["error" => "Faltan correo o contraseña.", "logeado" => false]);
         exit;
     }
 
-    // 2. Consulta segura a la tabla 'usuario'
-    $sql = "SELECT idUsuario, nombreCompleto, contraseña, tipoUsuario FROM usuario WHERE correo = ?";
+    // 2. Consulta segura a la tabla 'usuario' (AÑADIMOS 'activo')
+    $sql = "SELECT idUsuario, nombreCompleto, contraseña, tipoUsuario, activo 
+            FROM usuario 
+            WHERE correo = ?";
 
     $statement = $conn->prepare($sql);
     $statement->execute([$correo]);
     $usuario = $statement->fetch(PDO::FETCH_ASSOC);
 
     if (!$usuario) {
-        echo json_encode(["error" => "Correo no encontrado."]);
+        echo json_encode(["error" => "Correo no encontrado.", "logeado" => false]);
         exit;
     }
 
-    // 3. Verificación de Contraseña (Insegura, basada en tus datos SQL)
-    // 💡 Recomendación: Usa password_verify() si usas contraseñas hasheadas.
-    if ($contraseña !== $usuario['contraseña']) {
-        echo json_encode(["error" => "Contraseña incorrecta."]);
+    // 3. Verificación de estado ACTIVO (CRÍTICO)
+    if ($usuario['activo'] != 1) {
+        echo json_encode(["error" => "El usuario está inactivo o suspendido.", "logeado" => false]);
         exit;
     }
 
-    // 4. Éxito: CREAR LA SESIÓN DE PHP
+    // 4. Verificación de Contraseña (texto plano, como está en tu BD)
+    if ($contrasena_plana !== $usuario['contraseña']) {
+        echo json_encode(["error" => "Contraseña incorrecta.", "logeado" => false]);
+        exit;
+    }
+
+    // 5. Éxito: CREAR LA SESIÓN DE PHP
     $_SESSION['usuario'] = [
         'id' => $usuario['idUsuario'],
         'nombre' => $usuario['nombreCompleto'],
-        'correo' => $correo,
-        'rol' => $usuario['tipoUsuario']
+        'rol' => $usuario['tipoUsuario'],
+        'logeado' => true
     ];
 
-    // 5. Devolver el rol a JS para la redirección
+    // 6. Devolver la respuesta de éxito
     echo json_encode([
         'estado' => true,
-        'mensaje' => 'Login exitoso',
-        'rol' => $usuario['tipoUsuario']
+        'mensaje' => "Acceso concedido.",
+        'logeado' => true,
+        'tipoUsuario' => $usuario['tipoUsuario']
     ]);
 
 } catch (PDOException $e) {
-    echo json_encode(["errorDB" => "Error de consulta: " . $e->getMessage()]);
+    echo json_encode(["errorDB" => "Error de base de datos: " . $e->getMessage(), "logeado" => false]);
 } catch (Exception $e) {
-    echo json_encode(["error" => "Error interno del servidor."]);
+    echo json_encode(["error" => "Error general: " . $e->getMessage(), "logeado" => false]);
 }
 ?>
