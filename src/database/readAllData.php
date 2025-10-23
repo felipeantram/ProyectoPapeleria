@@ -1,4 +1,4 @@
-<?php #no se hace ningun cambio 
+<?php
 
 header('Content-Type: application/json');
 require_once 'connection.php';
@@ -15,7 +15,7 @@ try {
         exit;
     }
 
-    $sql = "SELECT * FROM $tabla";
+    $sql = "SELECT * FROM `$tabla`";
     $resultado = $conn->query($sql);
     $datos = $resultado->fetchAll(PDO::FETCH_ASSOC);
 

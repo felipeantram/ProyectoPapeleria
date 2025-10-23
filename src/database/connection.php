@@ -5,13 +5,11 @@ class ConexionDB
     public static function setConnection()
     {
         $host = "localhost";
-        $dbName = 'EL_TRIUNFO';
+        $dbname = 'EL_TRIUNFO';
         $user = 'root';
-        $password = 'aorf2024';
-        $port = '3306';
-        $characterSet = 'utf8mb4';
-
-        $dsn = "mysql:host=$host;dbname=$dbName;port=$port;charset=$characterSet";
+        $pass = 'mariadebe';
+        $charset = 'utf8mb4';
+        $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -19,9 +17,11 @@ class ConexionDB
         ];
 
         try {
-            return new PDO($dsn, $user, $password, $options);
+            return new PDO($dsn, $user, $pass, $options); // aquí se realiza la conexión a la BD
         } catch (PDOException $e) {
-            throw new PDOException('Error de conexion: ' . $e->getMessage());
+            throw new PDOException(
+                'Error de conexión a la base de datos:' . $e->getMessage()
+            );
         }
     }
 }

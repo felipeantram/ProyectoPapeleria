@@ -2,15 +2,14 @@
 
 header('Content-Type: application/json');
 require_once 'connection.php';
-try {
 
+try {
     $conn = ConexionDB::setConnection();
     $entrada = json_decode(file_get_contents('php://input'), true);
 
     $tabla = $entrada['tabla'] ?? null;
     $datosFormulario = $entrada['datosFormulario'] ?? [];
 
-    $campos = ['codigobarra', 'nombre', 'precio', 'existencia', 'idmarca', 'idcategoria'];
     $mapeo = [
         'codigobarra' => 'txtCodigoBarra',
         'nombre' => 'txtNombre',
@@ -35,7 +34,7 @@ try {
     $valores = array_map(fn($campo) => $datosFormulario[$mapeo[$campo]], $campos);
 
     $placeholders = implode(', ', array_fill(0, count($campos), '?'));
-    $sql = "INSERT INTO $tabla (" . implode(', ', $campos) . ") VALUES ($placeholders)";
+    $sql = "INSERT INTO `$tabla` (`" . implode('`, `', $campos) . "`) VALUES ($placeholders)";
 
     $statement = $conn->prepare($sql);
     if (!$statement) {
@@ -49,6 +48,8 @@ try {
 
 } catch (PDOException $e) {
     echo json_encode(["errorBD" => "Error en la inserción: " . $e->getMessage()]);
+} catch (Exception $e) {
+    echo json_encode(["error" => "Error: " . $e->getMessage()]);
 } catch (Exception $e) {
     echo json_encode(["error" => "Error: " . $e->getMessage()]);
 }
